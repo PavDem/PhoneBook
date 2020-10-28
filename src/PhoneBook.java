@@ -10,6 +10,7 @@ public class PhoneBook {
         String name;
         String number;
         String[][] book = new String[1][2];
+        int index;
         boolean isFinished = false;
 
         //there is no stop button, so...
@@ -34,7 +35,13 @@ public class PhoneBook {
             } else if (checkPhoneNumber(number)) {
                 //if it match number format, searching name matches and showing them
                 number = formatPhoneNumber(number);
-                printNameByNumber(book, number);
+                index = getIndexByNumber(book, number);
+                if (index != -1) {
+                    messenger(4);
+                    printNameByNumber(book, number);
+                } else {
+                    messenger(6);
+                }
                 continue;
             }
 
@@ -42,7 +49,7 @@ public class PhoneBook {
             name = formatName(name);
 
             //check if name already exist, -1 means no matches have been found
-            int index = getIndexByName(book, name);
+            index = getIndexByName(book, name);
             if (index != -1) {
                 //print number if match found, start new cycle
                 messenger(4);
@@ -54,18 +61,26 @@ public class PhoneBook {
             while (true) {
                 //enter number message
                 messenger(3);
+
                 //get number from command line
                 number = scanner.nextLine();
+
                 if (!checkPhoneNumber(number)) {
                     messenger(1);
+                    continue;
+                }
+
+                number = formatPhoneNumber(number);
+
+                index = getIndexByNumber(book, number);
+                //check if number already in list
+                if (index != -1) {
+                    messenger(5);
                     continue;
                 }
                 break;
             }
 
-
-            //format number
-            number = formatPhoneNumber(number);
 
             //add new record too book
             book = add(book, name, number);
@@ -81,13 +96,14 @@ public class PhoneBook {
     //method with all messages
     public static void messenger(int code) {
         //array with messages
-        String[] messages = new String[10];
+        String[] messages = new String[7];
         messages[0] = "Name doesn't match format, try again";
         messages[1] = "Phone number doesn't match format, try again";
-        messages[2] = "Enter full mame, please";
+        messages[2] = "Enter full mame or phone number";
         messages[3] = "Enter phone number, please";
         messages[4] = "Name already exist and has number attached to it";
         messages[5] = "Phone number already exist and has number attached to it";
+        messages[6] = "Number doesn't exist";
 
         System.out.println(messages[code]);
     }
@@ -191,13 +207,14 @@ public class PhoneBook {
 
     //at first i wanted to merge printNumberByName with getIndexByName and printNameByNumber with getIndexByNumber
     //but then i decided to keep them separated
-    public static void printNumberByName(String[][] book, String name) {
-        int index = getIndexByName(book, name);
+    public static void printNameByNumber(String[][] book, String number) {
+        int index = getIndexByNumber(book, number);
         System.out.println(book[index][0]);
     }
 
-    public static void printNameByNumber(String[][] book, String number) {
-        int index = getIndexByName(book, number);
+
+    public static void printNumberByName(String[][] book, String name) {
+        int index = getIndexByName(book, name);
         System.out.println(book[index][1]);
     }
 
@@ -211,9 +228,9 @@ public class PhoneBook {
         return -1;
     }
 
-    public static int getIndexByNumber(String[][] book, String name) {
+    public static int getIndexByNumber(String[][] book, String number) {
         for (int i = 0; i < book.length; i++) {
-            if (book[i][1] != null && book[i][1].equals(name)) {
+            if (book[i][1] != null && book[i][1].equals(number)) {
                 return i;
             }
         }
