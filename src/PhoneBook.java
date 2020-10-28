@@ -7,7 +7,7 @@ public class PhoneBook {
 
 
         Scanner scanner = new Scanner(System.in);
-        String name;
+        String nameOrNumber;
         String number;
         String[][] book = new String[1][2];
         String failMessage = "Failed, try again";
@@ -17,26 +17,27 @@ public class PhoneBook {
 
             //get name from command line
 
-            name = scanner.nextLine();
+            nameOrNumber = scanner.nextLine();
 
             //check if name satisfy minimal format requirements
-            if (!checkName(name) && !checkPhoneNumber(name)) {
+            if (!checkName(nameOrNumber) && !checkPhoneNumber(nameOrNumber)) {
                 //check if it match phone number.
                 // If it does, formatting phone number and searching name by phone number
-                System.out.println(failMessage);
+                messenger(0);
                 continue;
-            } else if(checkPhoneNumber(name)) {
-                number = formatPhoneNumber(name);
+            } else if (checkPhoneNumber(nameOrNumber)) {
+                //if it match number format, searching name matches and showing them
+                number = formatPhoneNumber(nameOrNumber);
                 int index = getIndexByNumber(book, number);
                 System.out.println(book[index][0]);
                 continue;
             }
 
             //format name
-            name = formatName(name);
+            nameOrNumber = formatName(nameOrNumber);
 
             //check if name already exist, -1 means no matches have been found
-            int index = getIndexByName(book, name);
+            int index = getIndexByName(book, nameOrNumber);
             if (index != -1) {
                 //print number if match found, start new cycle
                 number = book[index][1];
@@ -57,7 +58,7 @@ public class PhoneBook {
             number = formatPhoneNumber(number);
 
             //add new record too book
-            book = add(book, name, number);
+            book = add(book, nameOrNumber, number);
 
             list(book);
 
@@ -162,6 +163,20 @@ public class PhoneBook {
         }
     }
 
+
+    //at first i wanted to merge printNumberByName with getIndexByName and printNameByNumber with getIndexByNumber
+    //but then i decided to keep them separated
+    public static void printNumberByName(String[][] book, String name) {
+        int index = getIndexByName(book, name);
+        System.out.println(book[index][0]);
+    }
+
+    public static void printNameByNumber(String[][] book, String number) {
+        int index = getIndexByName(book, number);
+        System.out.println(book[index][1]);
+    }
+
+
     public static int getIndexByName(String[][] book, String name) {
         for (int i = 0; i < book.length; i++) {
             if (book[i][0] != null && book[i][0].equals(name)) {
@@ -180,7 +195,7 @@ public class PhoneBook {
         return -1;
     }
 
-    //ToDo
+    //sorting by ByAlphabetical Order with help of String.compareTo
     public static void sortByAlphabeticalOrder(String[][] book) {
         boolean needSort = true;
         while (needSort) {
@@ -200,7 +215,11 @@ public class PhoneBook {
     //ToDo
     //method with all messages
     public static void messenger(int code) {
+        //array with messages
+        String[] messages = new String[10];
+        messages[0] = "Name doesn't match format, try again ";
 
+        System.out.println(messages[code]);
     }
 
 }
