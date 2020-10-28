@@ -37,7 +37,7 @@ public class PhoneBook {
                 number = formatPhoneNumber(number);
                 index = getIndexByNumber(book, number);
                 if (index != -1) {
-                    messenger(4);
+                    messenger(5);
                     printNameByNumber(book, number);
                 } else {
                     messenger(6);
@@ -97,7 +97,7 @@ public class PhoneBook {
     public static void messenger(int code) {
         //array with messages
         String[] messages = new String[7];
-        messages[0] = "Name doesn't match format, try again";
+        messages[0] = "doesn't match any format, try again";
         messages[1] = "Phone number doesn't match format, try again";
         messages[2] = "Enter full mame or phone number";
         messages[3] = "Enter phone number, please";
