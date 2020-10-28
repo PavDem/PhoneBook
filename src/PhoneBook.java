@@ -26,6 +26,15 @@ public class PhoneBook {
             //format name
             name = formatName(name);
 
+            //check if name already exist, -1 means no matches have been found
+            int index = getIndexByName(book, name);
+            if(index != -1) {
+                //print number if match found, start new cycle
+                number = book[index][1];
+                System.out.println(number);
+                continue;
+            }
+
             //get number from command line
             number = scanner.nextLine();
 
@@ -138,13 +147,19 @@ public class PhoneBook {
         }
     }
 
-    public static int findIndexByName(String[][] book, String name) {
+    public static int getIndexByName(String[][] book, String name) {
         for (int i = 0; i < book.length; i++) {
             if (book[i][0] != null && book[i][0].equals(name)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    //ToDo
+    //method with messages
+    public static void messenger(int code) {
+
     }
 
 }
