@@ -219,8 +219,7 @@ public class PhoneBook {
     }
 
 
-    public static int
-    getIndexByName(String[][] book, String name) {
+    public static int getIndexByName(String[][] book, String name) {
         for (int i = 0; i < book.length; i++) {
             if (book[i][0] != null && book[i][0].equals(name)) {
                 return i;
