@@ -102,7 +102,7 @@ public class PhoneBook {
         messages[2] = "Enter full mame or phone number";
         messages[3] = "Enter phone number, please";
         messages[4] = "Name already exist and has number attached to it";
-        messages[5] = "Phone number already exist and has number attached to it";
+        messages[5] = "Phone number already exist and has name attached to it";
         messages[6] = "Number doesn't exist";
 
         System.out.println(messages[code]);
@@ -124,10 +124,10 @@ public class PhoneBook {
             if (!Character.isUpperCase(firstChar)) {
                 result += Character.toUpperCase(firstChar) + str.substring(1) + " ";
             } else {
-                result += str + "";
+                result += str + " ";
             }
         }
-        return result.trim();
+        return result;
     }
 
     private static void sortByLength(String[] words) {
@@ -219,7 +219,8 @@ public class PhoneBook {
     }
 
 
-    public static int getIndexByName(String[][] book, String name) {
+    public static int
+    getIndexByName(String[][] book, String name) {
         for (int i = 0; i < book.length; i++) {
             if (book[i][0] != null && book[i][0].equals(name)) {
                 return i;
