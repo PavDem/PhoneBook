@@ -10,9 +10,40 @@ public class PhoneBook {
         String name;
         String number;
         String[][] book = new String[5][2];
+        String failMessage = "Failed, try again";
+        boolean isFinished = false;
 
+        while (!isFinished) {
 
+            //get name from command line
+            name = scanner.nextLine();
 
+            //check if name satisfy minimal format requirements
+            if (!checkName(name)) {
+                System.out.println(failMessage);
+                continue;
+            }
+            //format name
+            name = formatName(name);
+
+            //get number from command line
+            number = scanner.nextLine();
+
+            //check if number satisfy minimal format requirements
+            if (!checkPhoneNumber(number)) {
+                System.out.println(failMessage);
+                continue;
+            }
+
+            //format number
+            number = formatPhoneNumber(number);
+
+            //add new record too book
+            add(book, name, number);
+
+            list(book);
+
+        }
 
     }
 
@@ -36,7 +67,7 @@ public class PhoneBook {
                 result += str + "";
             }
         }
-        return result;
+        return result.trim();
     }
 
     private static void sortByLength(String[] words) {
@@ -101,7 +132,7 @@ public class PhoneBook {
             String number = book[i][1];
             //check if both name and number filled, don't show otherwise
             if (name != null && number != null) {
-                String message = "Name is " + name + ", number is" + " " + number;
+                String message = name + ": " + number;
                 System.out.println(message);
             }
         }
