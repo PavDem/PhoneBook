@@ -12,23 +12,56 @@ public class PhoneBook {
         String[][] book = new String[5][2];
 
 
+
+
     }
 
 
     public static boolean checkName(String name) {
-        return true;
+        //check if name satisfy minimal format requirements
+        String[] words = name.trim().split(" ");
+        return words.length == 3;
+    }
+
+    private static String formatName(String name) {
+        String[] words = name.trim().split(" ");
+        sortByLength(words);
+        String result = "";
+        for (int i = 0; i < words.length; i++) {
+            String str = words[i];
+            char firstChar = str.charAt(0);
+            if (!Character.isUpperCase(firstChar)) {
+                result += Character.toUpperCase(firstChar) + str.substring(1) + " ";
+            } else {
+                result += str + "";
+            }
+        }
+        return result;
+    }
+
+    private static void sortByLength(String[] words) {
+        for (int i = 0; i < words.length - 1; i++) {
+            for (int j = 0; j < words.length - 1; j++) {
+                if (words[j].length() > words[j + 1].length()) {
+                    String tmp = words[j];
+                    words[j] = words[j + 1];
+                    words[j + 1] = tmp;
+                }
+            }
+        }
     }
 
     public static boolean checkPhoneNumber(String phoneNumber) {
-        return true;
-    }
-
-    public static String formatName(String name) {
-        return "";
+        String clean = phoneNumber.replaceAll("[^0-9]", "");
+        return clean.length() == 11;
     }
 
     public static String formatPhoneNumber(String number) {
-        return "";
+        String clean = number.replaceAll("[^0-9]", "");
+        String result = "+7" + " " + clean.substring(1, 4) + " " +
+                clean.substring(4, 7) + " " + clean.substring(7, 9) + " " + clean.substring(9);
+
+        return result;
     }
 
     public static void add(String[][] book, String name, String number) {
