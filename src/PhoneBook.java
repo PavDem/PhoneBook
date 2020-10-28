@@ -9,26 +9,35 @@ public class PhoneBook {
         Scanner scanner = new Scanner(System.in);
         String name;
         String number;
-        String[][] book = new String[5][2];
+        String[][] book = new String[1][2];
         String failMessage = "Failed, try again";
         boolean isFinished = false;
 
         while (!isFinished) {
 
             //get name from command line
+
             name = scanner.nextLine();
 
             //check if name satisfy minimal format requirements
-            if (!checkName(name)) {
+            if (!checkName(name) && !checkPhoneNumber(name)) {
+                //check if it match phone number.
+                // If it does, formatting phone number and searching name by phone number
                 System.out.println(failMessage);
                 continue;
+            } else if(checkPhoneNumber(name)) {
+                number = formatPhoneNumber(name);
+                int index = getIndexByNumber(book, number);
+                System.out.println(book[index][0]);
+                continue;
             }
+
             //format name
             name = formatName(name);
 
             //check if name already exist, -1 means no matches have been found
             int index = getIndexByName(book, name);
-            if(index != -1) {
+            if (index != -1) {
                 //print number if match found, start new cycle
                 number = book[index][1];
                 System.out.println(number);
@@ -48,7 +57,7 @@ public class PhoneBook {
             number = formatPhoneNumber(number);
 
             //add new record too book
-            add(book, name, number);
+            book = add(book, name, number);
 
             list(book);
 
@@ -104,10 +113,10 @@ public class PhoneBook {
         return result;
     }
 
-    public static void add(String[][] book, String name, String number) {
+    public static String[][] add(String[][] book, String name, String number) {
         //if last index elements(columns) don't equal null, create new array with original row length + 5 new rows
         if (book[book.length - 1][0] != null && book[book.length - 1][1] != null) {
-            int newLength = book.length + 5;
+            int newLength = book.length + 1;
             String[][] newBook = new String[newLength][2];
 
             //copy old records to new array
@@ -131,10 +140,16 @@ public class PhoneBook {
             }
         }
 
-        //add logic
+        //return new bigger array
+        return book;
     }
 
+
     public static void list(String[][] book) {
+
+        //sorting
+        sortByAlphabeticalOrder(book);
+
         //print phone book
         for (int i = 0; i < book.length; i++) {
             String name = book[i][0];
@@ -156,8 +171,34 @@ public class PhoneBook {
         return -1;
     }
 
+    public static int getIndexByNumber(String[][] book, String name) {
+        for (int i = 0; i < book.length; i++) {
+            if (book[i][1] != null && book[i][1].equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     //ToDo
-    //method with messages
+    public static void sortByAlphabeticalOrder(String[][] book) {
+        boolean needSort = true;
+        while (needSort) {
+            needSort = false;
+            for (int j = 0; j < book.length - 1; j++) {
+                if (book[j][0].compareTo(book[j + 1][0]) > 1) {
+                    String tmp = book[j][0];
+                    book[j][0] = book[j + 1][0];
+                    book[j + 1][0] = tmp;
+                    needSort = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    //ToDo
+    //method with all messages
     public static void messenger(int code) {
 
     }
