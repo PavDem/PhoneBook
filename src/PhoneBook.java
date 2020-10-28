@@ -7,65 +7,90 @@ public class PhoneBook {
 
 
         Scanner scanner = new Scanner(System.in);
-        String nameOrNumber;
+        String name;
         String number;
         String[][] book = new String[1][2];
-        String failMessage = "Failed, try again";
         boolean isFinished = false;
 
+        //there is no stop button, so...
         while (!isFinished) {
 
-            //get name from command line
+            //show start message
+            messenger(2);
 
-            nameOrNumber = scanner.nextLine();
+            //get name from command line
+            name = scanner.nextLine();
+
+            //number equals name for better readability
+            number = name;
+
 
             //check if name satisfy minimal format requirements
-            if (!checkName(nameOrNumber) && !checkPhoneNumber(nameOrNumber)) {
+            if (!checkName(name) && !checkPhoneNumber(number)) {
                 //check if it match phone number.
                 // If it does, formatting phone number and searching name by phone number
                 messenger(0);
                 continue;
-            } else if (checkPhoneNumber(nameOrNumber)) {
+            } else if (checkPhoneNumber(number)) {
                 //if it match number format, searching name matches and showing them
-                number = formatPhoneNumber(nameOrNumber);
-                int index = getIndexByNumber(book, number);
-                System.out.println(book[index][0]);
+                number = formatPhoneNumber(number);
+                printNameByNumber(book, number);
                 continue;
             }
 
             //format name
-            nameOrNumber = formatName(nameOrNumber);
+            name = formatName(name);
 
             //check if name already exist, -1 means no matches have been found
-            int index = getIndexByName(book, nameOrNumber);
+            int index = getIndexByName(book, name);
             if (index != -1) {
                 //print number if match found, start new cycle
-                number = book[index][1];
-                System.out.println(number);
+                messenger(4);
+                printNumberByName(book, name);
                 continue;
             }
-
-            //get number from command line
-            number = scanner.nextLine();
 
             //check if number satisfy minimal format requirements
-            if (!checkPhoneNumber(number)) {
-                System.out.println(failMessage);
-                continue;
+            while (true) {
+                //enter number message
+                messenger(3);
+                //get number from command line
+                number = scanner.nextLine();
+                if (!checkPhoneNumber(number)) {
+                    messenger(1);
+                    continue;
+                }
+                break;
             }
+
 
             //format number
             number = formatPhoneNumber(number);
 
             //add new record too book
-            book = add(book, nameOrNumber, number);
+            book = add(book, name, number);
 
+
+            //show all record
             list(book);
 
         }
 
     }
 
+    //method with all messages
+    public static void messenger(int code) {
+        //array with messages
+        String[] messages = new String[10];
+        messages[0] = "Name doesn't match format, try again";
+        messages[1] = "Phone number doesn't match format, try again";
+        messages[2] = "Enter full mame, please";
+        messages[3] = "Enter phone number, please";
+        messages[4] = "Name already exist and has number attached to it";
+        messages[5] = "Phone number already exist and has number attached to it";
+
+        System.out.println(messages[code]);
+    }
 
     public static boolean checkName(String name) {
         //check if name satisfy minimal format requirements
@@ -212,14 +237,5 @@ public class PhoneBook {
         }
     }
 
-    //ToDo
-    //method with all messages
-    public static void messenger(int code) {
-        //array with messages
-        String[] messages = new String[10];
-        messages[0] = "Name doesn't match format, try again ";
-
-        System.out.println(messages[code]);
-    }
 
 }
